@@ -1662,7 +1662,7 @@ typedef
 
       /* COUNT ones / leading zeroes / leading sign bits (not including topmost
          bit) */
-      Iop_Cnt8x16,
+      Iop_Cnt8x16, Iop_Cnt16x8, Iop_Cnt32x4, Iop_Cnt64x2,
       Iop_Clz8x16, Iop_Clz16x8, Iop_Clz32x4,
       Iop_Cls8x16, Iop_Cls16x8, Iop_Cls32x4,
 

@@ -5108,11 +5108,13 @@ IRExpr* expr2vbits_Unop ( MCEnv* mce, IROp op, IRAtom* atom )
 
       case Iop_CmpNEZ16x4:
       case Iop_Clz16x4:
+      case Iop_Clz16x4:
       case Iop_Cls16x4:
       case Iop_Abs16x4:
          return mkPCast16x4(mce, vatom);
 
       case Iop_CmpNEZ16x8:
+      case Iop_Cnt16x8:
       case Iop_Clz16x8:
       case Iop_Cls16x8:
       case Iop_Abs16x8:
@@ -5128,6 +5130,7 @@ IRExpr* expr2vbits_Unop ( MCEnv* mce, IROp op, IRAtom* atom )
          return mkPCast32x2(mce, vatom);
 
       case Iop_CmpNEZ32x4:
+      case Iop_Cnt32x4:
       case Iop_Clz32x4:
       case Iop_Cls32x4:
       case Iop_F32toI32Ux4_RZ:
@@ -5145,6 +5148,7 @@ IRExpr* expr2vbits_Unop ( MCEnv* mce, IROp op, IRAtom* atom )
 
       case Iop_CmpNEZ64x2:
       case Iop_CipherSV128:
+      case Iop_Cnt64x2:
       case Iop_Clz64x2:
       case Iop_Abs64x2:
       case Iop_Ctz64x2:

@@ -17183,9 +17183,14 @@ s390_irgen_VCTZ(UChar v1, UChar v2, UChar m3)
 static const HChar *
 s390_irgen_VPOPCT(UChar v1, UChar v2, UChar m3)
 {
-   vassert(m3 == 0);
+   const IROp ops[] = { Iop_Cnt8x16, Iop_Cnt16x8, Iop_Cnt32x4, Iop_Cnt64x2};
+   if(s390_host_has_vx1) {
+      s390_insn_assert(m4 < sizeof(ops) / sizeof(ops[0]));
+   } else {
+      s390_insn_assert(m4 == 0);
+   }
 
-   put_vr_qw(v1, unop(Iop_Cnt8x16, get_vr_qw(v2)));
+   put_vr_qw(v1, unop(ops[m4], get_vr_qw(v2)));
 
    return "vpopct";
 }
@@ -18586,6 +18591,34 @@ s390_irgen_VFTCI(UChar v1, UChar v2, UShort i3, UChar m4, UChar m5)
    s390_cc_set(cc);
 
    return "vftci";
+}
+
+static const HChar *
+s390_irgen_VNN(UChar v1, UChar v2, UChar v3)
+{
+   IRExpr* and = binop(Iop_AndV128, get_vr_qw(v2), get_vr_qw(v3));
+   put_vr_qw(v1, unop(Iop_NotV128, and));
+
+   return "vnn";
+}
+
+static const HChar *
+s390_irgen_VNX(UChar v1, UChar v2, UChar v3)
+{
+   IRExpr* xor = binop(Iop_XorV128, get_vr_qw(v2), get_vr_qw(v3));
+   put_vr_qw(v1, unop(Iop_NotV128, xor));
+
+   return "vnx";
+}
+
+static const HChar *
+s390_irgen_VOC(UChar v1, UChar v2, UChar v3)
+{
+   put_vr_qw(v1, binop(Iop_OrV128,
+             get_vr_qw(v2), unop(Iop_NotV128, get_vr_qw(v3)))
+             );
+
+   return "voc";
 }
 
 /* New insns are added here.
@@ -20758,12 +20791,18 @@ s390_decode_6byte_and_irgen(const UChar *bytes)
    case 0xe7000000006bULL: s390_format_VRR_VVV(s390_irgen_VNO, ovl.fmt.VRR.v1,
                                                ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
                                                ovl.fmt.VRR.rxb);  goto ok;
-   case 0xe7000000006cULL: /* VNX */ goto unimplemented;
+   case 0xe7000000006cULL: s390_format_VRR_VVV(s390_irgen_VNX, ovl.fmt.VRR.v1,
+                                               ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
+                                               ovl.fmt.VRR.rxb);  goto ok;
    case 0xe7000000006dULL: s390_format_VRR_VVV(s390_irgen_VX, ovl.fmt.VRR.v1,
                                                ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
                                                ovl.fmt.VRR.rxb);  goto ok;
-   case 0xe7000000006eULL: /* VNN */ goto unimplemented;
-   case 0xe7000000006fULL: /* VOC */ goto unimplemented;
+   case 0xe7000000006eULL: s390_format_VRR_VVV(s390_irgen_VNN, ovl.fmt.VRR.v1,
+                                               ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
+                                               ovl.fmt.VRR.rxb);  goto ok;
+   case 0xe7000000006fULL: s390_format_VRR_VVV(s390_irgen_VOC, ovl.fmt.VRR.v1,
+                                               ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
+                                               ovl.fmt.VRR.rxb);  goto ok;
    case 0xe70000000070ULL: s390_format_VRR_VVVM(s390_irgen_VESLV, ovl.fmt.VRR.v1,
                                                 ovl.fmt.VRR.v2, ovl.fmt.VRR.r3,
                                                 ovl.fmt.VRR.m4, ovl.fmt.VRR.rxb);  goto ok;

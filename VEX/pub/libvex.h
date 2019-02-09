@@ -144,7 +144,8 @@ typedef
 #define VEX_S390X_MODEL_ZBC12    11
 #define VEX_S390X_MODEL_Z13      12
 #define VEX_S390X_MODEL_Z13S     13
-#define VEX_S390X_MODEL_UNKNOWN  14     /* always last in list */
+#define VEX_S390X_MODEL_Z14      14
+#define VEX_S390X_MODEL_UNKNOWN  15     /* always last in list */
 #define VEX_S390X_MODEL_MASK     0x3F
 
 #define VEX_HWCAPS_S390X_LDISP (1<<6)   /* Long-displacement facility */
@@ -161,6 +162,7 @@ typedef
 #define VEX_HWCAPS_S390X_PFPO  (1<<17)  /* Perform floating point ops facility */
 #define VEX_HWCAPS_S390X_VX    (1<<18)  /* Vector facility */
 #define VEX_HWCAPS_S390X_MSA5  (1<<19)  /* message security assistance facility */
+#define VEX_HWCAPS_S390X_VX1   (1<<20)  /* Vector-enhancements facility 1*/
 
 
 /* Special value representing all available s390x hwcaps */
@@ -177,7 +179,8 @@ typedef
                                 VEX_HWCAPS_S390X_ETF2  | \
                                 VEX_HWCAPS_S390X_PFPO  | \
                                 VEX_HWCAPS_S390X_VX    | \
-                                VEX_HWCAPS_S390X_MSA5)
+                                VEX_HWCAPS_S390X_MSA5  | \
+                                VEX_HWCAPS_S390X_VX1)
 
 #define VEX_HWCAPS_S390X(x)  ((x) & ~VEX_S390X_MODEL_MASK)
 #define VEX_S390X_MODEL(x)   ((x) &  VEX_S390X_MODEL_MASK)

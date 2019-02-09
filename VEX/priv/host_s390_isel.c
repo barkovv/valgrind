@@ -3874,6 +3874,18 @@ s390_isel_vec_expr_wrk(ISelEnv *env, IRExpr *expr)
          size = 1;
          vec_unop = S390_VEC_COUNT_ONES;
          goto Iop_V_wrk;
+      case Iop_Cnt16x8:
+         size = 2;
+         vec_unop = S390_VEC_COUNT_ONES;
+         goto Iop_V_wrk;
+      case Iop_Cnt32x4:
+         size = 4;
+         vec_unop = S390_VEC_COUNT_ONES;
+         goto Iop_V_wrk;
+      case Iop_Cnt64x2:
+         size = 8;
+         vec_unop = S390_VEC_COUNT_ONES;
+         goto Iop_V_wrk;
 
       case Iop_Neg64Fx2:
          size = 8;
